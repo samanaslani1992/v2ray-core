@@ -39,7 +39,7 @@ var upgrader = &websocket.Upgrader{
 func (h *requestHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	var earlydata string
 	if request.URL.Path != h.path {
-		if h.ln.config.MaxEarlyData == 0 || strings.HasPrefix(request.URL.Path, h.path) {
+		if h.ln.config.MaxEarlyData == 0 || !strings.HasPrefix(request.URL.Path, h.path) {
 			writer.WriteHeader(http.StatusNotFound)
 			return
 		}

@@ -86,7 +86,7 @@ type dialerWithEarlyData struct {
 
 func (d dialerWithEarlyData) Dial(earlyData []byte) (*websocket.Conn, error) {
 	earlyDataBuf := bytes.NewBuffer(nil)
-	base64EarlyDataEncoder := base64.NewEncoder(base64.URLEncoding, earlyDataBuf)
+	base64EarlyDataEncoder := base64.NewEncoder(base64.RawURLEncoding, earlyDataBuf)
 
 	earlydata := bytes.NewReader(earlyData)
 	limitedEarlyDatareader := io.LimitReader(earlydata, int64(d.config.MaxEarlyData))

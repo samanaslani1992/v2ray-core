@@ -107,6 +107,7 @@ func (c *connection) Write(b []byte) (int, error) {
 		}
 		c.remoteAddr = c.conn.RemoteAddr()
 		c.shouldWait = false
+		return len(b), nil
 	}
 	if err := c.conn.WriteMessage(websocket.BinaryMessage, b); err != nil {
 		return 0, err
