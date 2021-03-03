@@ -139,6 +139,7 @@ type WebSocketConfig struct {
 	Path2               string            `json:"Path"` // The key was misspelled. For backward compatibility, we have to keep track the old key.
 	Headers             map[string]string `json:"headers"`
 	AcceptProxyProtocol bool              `json:"acceptProxyProtocol"`
+	MaxEarlyData        int32             `json:"maxEarlyData"`
 }
 
 // Build implements Buildable.
@@ -155,8 +156,9 @@ func (c *WebSocketConfig) Build() (proto.Message, error) {
 		})
 	}
 	config := &websocket.Config{
-		Path:   path,
-		Header: header,
+		Path:         path,
+		Header:       header,
+		MaxEarlyData: c.MaxEarlyData,
 	}
 	if c.AcceptProxyProtocol {
 		config.AcceptProxyProtocol = c.AcceptProxyProtocol
