@@ -3,9 +3,12 @@
 package websocket
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
+	"encoding/base64"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -34,9 +37,13 @@ var upgrader = &websocket.Upgrader{
 }
 
 func (h *requestHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	var earlydata string
 	if request.URL.Path != h.path {
-		writer.WriteHeader(http.StatusNotFound)
-		return
+		if h.ln.config.MaxEarlyData == 0 || strings.HasPrefix(request.URL.Path, h.path) {
+			writer.WriteHeader(http.StatusNotFound)
+			return
+		}
+		earlydata = request.URL.Path[len(h.path):]
 	}
 	conn, err := upgrader.Upgrade(writer, request, nil)
 	if err != nil {
@@ -51,6 +58,11 @@ func (h *requestHandler) ServeHTTP(writer http.ResponseWriter, request *http.Req
 			IP:   forwardedAddrs[0].IP(),
 			Port: int(0),
 		}
+	}
+	if earlydata != "" {
+		earlyDataReader := base64.NewDecoder(base64.RawURLEncoding, bytes.NewReader([]byte(earlydata)))
+		h.ln.addConn(newConnectionWithEarlyData(conn, remoteAddr, earlyDataReader))
+		return
 	}
 
 	h.ln.addConn(newConnection(conn, remoteAddr))

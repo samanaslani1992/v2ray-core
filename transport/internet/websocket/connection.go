@@ -32,6 +32,14 @@ func newConnection(conn *websocket.Conn, remoteAddr net.Addr) *connection {
 	}
 }
 
+func newConnectionWithEarlyData(conn *websocket.Conn, remoteAddr net.Addr, earlyData io.Reader) *connection {
+	return &connection{
+		conn:       conn,
+		remoteAddr: remoteAddr,
+		reader:     earlyData,
+	}
+}
+
 // Read implements net.Conn.Read()
 func (c *connection) Read(b []byte) (int, error) {
 	for {
