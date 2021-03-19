@@ -8,16 +8,17 @@ import (
 	"sync"
 	"time"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
+	"google.golang.org/grpc/connectivity"
+	"google.golang.org/grpc/credentials"
+
 	"github.com/v2fly/v2ray-core/v4/common"
 	"github.com/v2fly/v2ray-core/v4/common/net"
 	"github.com/v2fly/v2ray-core/v4/common/session"
 	"github.com/v2fly/v2ray-core/v4/transport/internet"
 	"github.com/v2fly/v2ray-core/v4/transport/internet/grpc/encoding"
 	"github.com/v2fly/v2ray-core/v4/transport/internet/tls"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/backoff"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/credentials"
 )
 
 func Dial(ctx context.Context, dest net.Destination, streamSettings *internet.MemoryStreamConfig) (internet.Connection, error) {
@@ -59,7 +60,7 @@ func dialgRPC(ctx context.Context, dest net.Destination, streamSettings *interne
 	if err != nil {
 		return nil, newError("Cannot dial grpc").Base(err)
 	}
-	return encoding.NewClientConn(gunService), nil
+	return encoding.NewGunConn(gunService, nil), nil
 }
 
 func getGrpcClient(dest net.Destination, dialOption grpc.DialOption) (*grpc.ClientConn, error) {
@@ -82,7 +83,7 @@ func getGrpcClient(dest net.Destination, dialOption grpc.DialOption) (*grpc.Clie
 				BaseDelay:  500 * time.Millisecond,
 				Multiplier: 1.5,
 				Jitter:     0.2,
-				MaxDelay:   19 * time.Millisecond,
+				MaxDelay:   19 * time.Second,
 			},
 			MinConnectTimeout: 5 * time.Second,
 		}),

@@ -5,14 +5,15 @@ package grpc
 import (
 	"context"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+
 	"github.com/v2fly/v2ray-core/v4/common"
 	"github.com/v2fly/v2ray-core/v4/common/net"
 	"github.com/v2fly/v2ray-core/v4/common/session"
 	"github.com/v2fly/v2ray-core/v4/transport/internet"
 	"github.com/v2fly/v2ray-core/v4/transport/internet/grpc/encoding"
 	"github.com/v2fly/v2ray-core/v4/transport/internet/tls"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
 type Listener struct {
@@ -28,7 +29,7 @@ type Listener struct {
 
 func (l Listener) Tun(server encoding.GunService_TunServer) error {
 	tunCtx, cancel := context.WithCancel(l.ctx)
-	l.handler(encoding.NewServerConn(server, cancel))
+	l.handler(encoding.NewGunConn(server, cancel))
 	<-tunCtx.Done()
 	return nil
 }
