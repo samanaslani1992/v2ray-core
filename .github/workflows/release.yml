@@ -64,8 +64,8 @@ jobs:
             goarch: mips64le
           - goos: android
             goarch: mipsle
-          - goos: linux
-            goarch: mips
+          - goos: android
+            goarch: 386
           # END MIPS
           # BEGIN Android
           - goos: android
@@ -80,7 +80,6 @@ jobs:
       GOARCH: ${{ matrix.goarch }}
       GOARM: ${{ matrix.goarm }}
       CGO_ENABLED: 0
-      CC: arm-linux-gnueabi-gcc
 
     steps:
       - name: Checkout codebase
