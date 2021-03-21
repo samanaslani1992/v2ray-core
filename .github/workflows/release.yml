@@ -26,52 +26,8 @@ jobs:
     strategy:
       matrix:
         # Include amd64 on all platforms.
-        goos: [windows, freebsd, openbsd, linux, dragonfly, darwin]
-        goarch: [amd64, 386]
-        exclude:
-          # Exclude i386 on darwin and dragonfly.
-          - goarch: 386
-            goos: dragonfly
-          - goarch: 386
-            goos: darwin
-        include:
-          # BEGIN Linux ARM 5 6 7
-          - goos: android
-            goarch: arm
-            goarm: 7
-          - goos: android
-            goarch: arm
-            goarm: 6
-          - goos: android
-            goarch: arm
-            goarm: 5
-          # END Linux ARM 5 6 7
-          # Windows ARM 7
-          - goos: android
-            goarch: arm
-            goarm: 7
-          # BEGIN Other architectures
-          - goos: android
-            goarch: arm64
-          - goos: linux
-            goarch: arm64
-          - goos: android
-            goarch: riscv64
-          # BEGIN MIPS
-          - goos: android
-            goarch: mips64
-          - goos: linux
-            goarch: mips64le
-          - goos: android
-            goarch: mipsle
-          - goos: android
-            goarch: 386
-          # END MIPS
-          # BEGIN Android
-          - goos: android
-            goarch: arm
-          # END Android
-          # END Other architectures
+        goos: [android, linux]
+        goarch: [amd64, 386, arm, arm64be]
       fail-fast: false
 
     runs-on: ubuntu-latest
