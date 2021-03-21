@@ -28,6 +28,33 @@ jobs:
         # Include amd64 on all platforms.
         goos: [android, linux]
         goarch: [amd64, 386, arm, arm64be]
+        exclude:
+          # Exclude i386 on darwin and dragonfly.
+          - goarch: 386
+            goos: dragonfly
+          - goarch: 386
+            goos: darwin
+        include:
+          # BEGIN Linux ARM 5 6 7
+          - goos: linux
+            goarch: arm
+            goarm: 7
+          - goos: linux
+            goarch: arm
+            goarm: 6
+          - goos: linux
+            goarch: arm
+            goarm: 5
+          # END Linux ARM 5 6 7
+          # BEGIN Android
+          - goos: android
+            goarch: arm64
+          - goos: android
+            goarch: arm
+          - goos: android
+            goarch: 386
+          # END Android
+          # END Other architectures
       fail-fast: false
 
     runs-on: ubuntu-latest
