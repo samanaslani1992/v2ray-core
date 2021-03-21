@@ -36,33 +36,33 @@ jobs:
             goos: darwin
         include:
           # BEGIN Linux ARM 5 6 7
-          - goos: linux
+          - goos: android
             goarch: arm
             goarm: 7
-          - goos: linux
+          - goos: android
             goarch: arm
             goarm: 6
-          - goos: linux
+          - goos: android
             goarch: arm
             goarm: 5
           # END Linux ARM 5 6 7
           # Windows ARM 7
-          - goos: windows
+          - goos: android
             goarch: arm
             goarm: 7
           # BEGIN Other architectures
-          - goos: darwin
+          - goos: android
             goarch: arm64
           - goos: linux
             goarch: arm64
-          - goos: linux
+          - goos: android
             goarch: riscv64
           # BEGIN MIPS
-          - goos: linux
+          - goos: android
             goarch: mips64
           - goos: linux
             goarch: mips64le
-          - goos: linux
+          - goos: android
             goarch: mipsle
           - goos: linux
             goarch: mips
